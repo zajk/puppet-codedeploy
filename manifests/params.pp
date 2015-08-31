@@ -19,4 +19,6 @@ class codedeploy::params {
       fail("${::operatingsystem} not supported")
     }
   }
+  $region        = undef
+  $region_bucket = undef
 }

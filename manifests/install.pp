@@ -23,7 +23,8 @@ class codedeploy::install {
         }
       }
       exec { 'download_codedeploy_installer':
-        command => '/usr/bin/aws s3 cp s3://aws-codedeploy-us-east-1/latest/install . --region us-east-1',
+        path    => [ '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin:/bin' ],
+        command => "aws s3 cp s3://${codedeploy::region_bucket}/latest/install . --region ${codedeploy::region}",
         cwd     => '/tmp',
         creates => '/tmp/install'
       }
@@ -36,7 +37,7 @@ class codedeploy::install {
         notify    => Exec['install_codedeploy_agent'],
       }
       exec { 'install_codedeploy_agent':
-        command     => '/tmp/install auto',
+        command     => '/tmp/install --sanity-check auto',
         cwd         => '/tmp',
         refreshonly => true,
       }
